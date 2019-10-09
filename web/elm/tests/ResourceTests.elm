@@ -3,6 +3,7 @@ module ResourceTests exposing (all)
 import Application.Application as Application
 import Common exposing (defineHoverBehaviour, queryView)
 import Concourse
+import Concourse.BuildStatus exposing (BuildStatus(..))
 import Concourse.Pagination exposing (Direction(..))
 import DashboardTests
     exposing
@@ -300,7 +301,7 @@ all =
                                             , pipelineName = pipelineName
                                             , jobName = "some-job"
                                             }
-                                    , status = Concourse.BuildStatusSucceeded
+                                    , status = BuildStatusSucceeded
                                     , duration =
                                         { startedAt = Nothing
                                         , finishedAt = Nothing
@@ -338,7 +339,7 @@ all =
                                             , pipelineName = pipelineName
                                             , jobName = "some-job"
                                             }
-                                    , status = Concourse.BuildStatusSucceeded
+                                    , status = BuildStatusSucceeded
                                     , duration =
                                         { startedAt = Nothing
                                         , finishedAt = Nothing
@@ -2865,14 +2866,7 @@ all =
                                     Time.millisToPosix 1000
                                 )
                             |> Tuple.second
-                            |> Common.contains
-                                (Effects.FetchCheck
-                                    { teamName = teamName
-                                    , pipelineName = pipelineName
-                                    , resourceName = resourceName
-                                    , checkID = 0
-                                    }
-                                )
+                            |> Common.contains (Effects.FetchCheck 0)
                 , test "when check resolves successfully, resource and versions refresh" <|
                     \_ ->
                         init
