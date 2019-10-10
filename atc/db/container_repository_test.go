@@ -694,20 +694,20 @@ var _ = Describe("ContainerRepository", func() {
 				gracePeriod = 3 * time.Minute
 
 				_, err = psql.Insert("workers").SetMap(map[string]interface{}{
-					"name": "stalled-worker",
+					"name":  "stalled-worker",
 					"state": "stalled",
 				}).RunWith(dbConn).Exec()
 				Expect(err).NotTo(HaveOccurred())
 
 				_, err = psql.Insert("workers").SetMap(map[string]interface{}{
-					"name": "not-stalled-worker",
+					"name":  "not-stalled-worker",
 					"state": "running",
 				}).RunWith(dbConn).Exec()
 				Expect(err).NotTo(HaveOccurred())
 
 				// containers 2 & 3 are now eligible for deletion, but 3 is on a stalled worker
 				_, err = psql.Update("containers").
-					Set("missing_since", today.Add(-5 * time.Minute)).
+					Set("missing_since", today.Add(-5*time.Minute)).
 					Set("worker_name", "not-stalled-worker").
 					Where(sq.Eq{"handle": "some-handle-2"}).
 					RunWith(dbConn).Exec()
